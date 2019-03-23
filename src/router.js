@@ -1,25 +1,73 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import store from './store'
+import Discover from './views/navs/Discover.vue'
+import Follows from './views/navs/Follows.vue'
+import Message from './views/navs/Message.vue'
+import Me from './views/navs/Me.vue'
+import Login from './views/login/Login.vue'
 
 Vue.use(Router)
 
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
-  ]
+const router = new Router({
+    // mode: 'history',
+    base: process.env.BASE_URL,
+    routes: [{
+        path: '/',
+        redirect: '/discover'
+    }, {
+        path: '/discover',
+        name: 'discover',
+        component: Discover,
+        meta: {
+            requiresAuth: true
+        }
+    }, {
+        path: '/follows',
+        name: 'follows',
+        component: Follows,
+        meta: {
+            requiresAuth: true
+        }
+    }, {
+        path: '/message',
+        name: 'message',
+        component: Message,
+        meta: {
+            requiresAuth: true
+        }
+    }, {
+        path: '/me',
+        name: 'me',
+        component: Me,
+        meta: {
+            requiresAuth: true
+        }
+    }, {
+        path: '/login',
+        name: 'login',
+        component: Login
+    }]
 })
+
+/**
+ * 对路由进行拦截
+ */
+router.beforeEach((to, from, next) => {
+    console.log(to.path)
+    console.log(store.state.token)
+    console.log(store.state.hasLogin)
+    if (to.path === '/login' && store.state.token && store.state.hasLogin) {
+        return false;
+    }
+    if (to.meta.requiresAuth) {
+        if (!store.state.token) {
+            router.push('/login')
+            return false;
+        }
+    }
+
+    next()
+});
+
+export default router
