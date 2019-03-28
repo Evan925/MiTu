@@ -6,6 +6,9 @@ import Follows from './views/navs/Follows.vue'
 import Message from './views/navs/Message.vue'
 import Me from './views/navs/Me.vue'
 import Login from './views/login/Login.vue'
+import Register from './views/login/Register.vue'
+import localDataHelper from "./Utils/localDataHelper";
+
 
 Vue.use(Router)
 
@@ -47,6 +50,10 @@ const router = new Router({
         path: '/login',
         name: 'login',
         component: Login
+    }, {
+        path: '/register',
+        name: 'register',
+        component: Register
     }]
 })
 
@@ -54,14 +61,12 @@ const router = new Router({
  * 对路由进行拦截
  */
 router.beforeEach((to, from, next) => {
-    console.log(to.path)
-    console.log(store.state.token)
-    console.log(store.state.hasLogin)
-    if (to.path === '/login' && store.state.token && store.state.hasLogin) {
+
+    if (to.path === '/login' && localDataHelper.get('isLogin') || to.path === '/register' && localDataHelper.get('isLogin')) {
         return false;
     }
     if (to.meta.requiresAuth) {
-        if (!store.state.token) {
+        if (!localDataHelper.get('isLogin')) {
             router.push('/login')
             return false;
         }

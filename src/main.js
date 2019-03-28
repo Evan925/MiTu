@@ -8,11 +8,12 @@ import router from './router'
 // import 'iview/dist/styles/iview.css'
 
 import store from './store'
+
 import './plugins/element.js'
 import './plugins/iview.js'
 // Vue.use(ElementUI)
 // Vue.use(iView)
-
+// Vue.use($)
 Vue.config.productionTip = false
 
 new Vue({

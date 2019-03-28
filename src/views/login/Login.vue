@@ -1,73 +1,251 @@
 <template>
-  <div class="login" id="login">
-    <h2>登录、注册页面</h2>
+  <div class="login-container" id="login-container">
     <div class="login-content">
-      <input placeholder="请输入token..." type="text" v-model="token" @keydown.enter="doLogin">
-      <button type="button" @click="doLogin">登录</button>
+      <div class="login-head">
+        <h1>登录</h1>
+      </div>
+      <div class="login-body">
+        <input name="username"  type="text" v-model="username" placeholder="请输入用户名/邮箱...">
+        <input name="password"  type="password" v-model="password" placeholder="请输入密码...">
+        <p>
+          <a href="#" class="btn-go-register" @click="goRegister">没有账号？立即注册</a>
+          <a href="#" class="btn-go-forget" @click="goForget">忘记密码？</a>
+        </p>
+        <span class="login-error-message">用户名或密码输入错误，请检查！</span>
+        <button type="button" class="btn-login" @click="doLogin">登录</button>
+      </div>
+       <button type="button" @click="testGetApiWithNoToken">测试获取数据（不带token）</button>
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import $ from "jquery"; //加载jQuery
 import store from "@/store";
+import localDataHelper from "@/Utils/localDataHelper";
+import cookie from "@/Utils/localDataHelper";
 
 export default {
   name: "login",
-  created() {},
+  created() {
+    this.initWindow();
+    this.listenInputChange(); 
+  },
   data() {
     return {
-      token: ""
+      token: "",
+      username: "mitu",
+      password: "123456"
     };
   },
   methods: {
     doLogin() {
-      if (this.token === "") {
-        console.log("请输入token");
-      } 
-      else {
-        store.state.token = this.token  
-        store.state.hasLogin=true
-        console.log(this.token)
-        this.$router.push('/me') 
-           console.log("token：", store.state.token)
+      let _this = this;
+      if (_this.username === "") {
+        _this.showError(true, true, false, "请输入用户名！");
+        // this.$Message.warning("请输入用户名！");
+        return false;
       }
-    }
+      if (_this.password === "") {
+        _this.showError(true, false, false, "请输入密码！");
+        //  this.$Message.warning("请输入密码！");
+        return false;
+      }
+      $(".btn-login").attr("disabled", "disabled");
+      const msg = _this.$Message.loading({
+        content: "正在登录...",
+        duration: 0
+      });
+      setTimeout(msg, 1000);
+
+      const loginSuccessTimer = setTimeout(() => {
+        _this.$axios
+          .post("http://localhost:24063/api/Login", {
+            username: _this.username,
+            password: _this.password
+          })
+          .then(res => {
+            console.log(res);
+            if (res.status === 200) {
+              if(res.data.code===0){            
+         
+              localDataHelper.set('isLogin', true)
+              localDataHelper.set("MiTuUserName", _this.username)
+              localDataHelper.set("MiTuUser_token", res.data.token)
+              localDataHelper.set("MiTuUser_loginIdentity", res.data.loginIdentity)
+              cookie.set(".AspNetCore.Identity.Application",res.data.loginIdentity,'s10')
+
+              _this.info();
+             _this.$Message.success("登录成功");     
+             _this.$router.push("/me");
+          }else{
+               _this.$Message.error(res.data.message);
+            }
+          } else {
+              _this.$Message.error("登录失败");
+            }
+          });
+             $(".btn-login").removeAttr("disabled");      
+        clearTimeout(loginSuccessTimer);
+      }, 2000);
+    },
+    goRegister() {
+      //TODO:切换注册界面
+      // this.$Message.success("TODO:切换到注册页面！");
+      this.$router.push("/register");
+    },
+    goForget() {
+      //TODO:切换找回密码界面
+      this.$Message.success("TODO:切换到找回密码页面！");
+      cookie.set(".AspNetCore.Identity.Application",res.data.loginIdentity) //设置token
+    },
+    initWindow() {
+      const timer = setTimeout(() => {
+        let _wH = $(window).height(),
+          _$loginContent = $(".login-content");
+        _$loginContent.css("margin-top", _wH / 2 - _$loginContent.height() / 2);
+        $(".login-container").height(_wH);
+        clearTimeout(timer);
+      }, 1);
+    },
+    listenInputChange() {
+      let _this = this;
+      //监听用户名输入和密码输入内容改变状态
+      const timer = setTimeout(() => {
+        $("input[name='username'],input[name='password']").change(function(e) {
+          e.preventDefault();
+          _this.showError();
+        });
+        clearTimeout(timer);
+      }, 1);
+    },
+    showError(
+      isShow = false,
+      isUinput = true,
+      isOther = true,
+      text = "&nbsp;"
+    ) {
+      let _$uInput = $("input[name='username']"),
+        _$pInput = $("input[name='password']"),
+        _$error = $(".login-error-message");
+      if (isShow && isOther) {
+        _$error.text(text);
+        _$error.addClass("show");
+        return false;
+      }
+      if (isShow) {
+        if (isUinput) {
+          _$uInput.addClass("login-input-error");
+          _$uInput.focus();
+        } else {
+          _$pInput.addClass("login-input-error");
+          _$pInput.focus();
+        }
+        _$error.text(text);
+        _$error.addClass("show");
+      } else {
+        _$uInput.removeClass("login-input-error");
+        _$pInput.removeClass("login-input-error");
+        _$error.html("&nbsp");
+        _$error.removeClass("show");
+      }
+    },
+    info(nodesc) {
+      const _iTimer = setTimeout(() => {
+        this.$Notice.info({
+          title: "通知",
+          desc: nodesc ? "" : "恭喜您登录成功，欢迎回到咪兔校园，emmmm~"
+        });
+        clearTimeout(_iTimer);
+      }, 3000);
+    },
+    testGetApiWithNoToken(){
+      this.$axios.get('http://localhost:24063/api/Login').then(res=>{
+        console.log(res)
+      })
+    },
+   
   },
-  components: {
-    // HelloWorld
-  }
+  components: {}
 };
 </script>
 <style lang="less" scoped>
-.login {
-  text-align: center;
-  background: #ff6666;
-  height: 736px;
-  h2 {
-    color: white;
-    font-size: 14px;
-  }
+.login-container {
+  width: 100%;
+  // height: 100%;
+  background-image: url("../../assets/app_backgrouds/login_bg.jpeg");
+  background-size: cover;
+  overflow: hidden;
+
   .login-content {
-    width: 300px;
+    box-sizing: border-box;
+    width: 336px;
+    // height: 290px;
     margin: auto;
-    input {
-      box-sizing: border-box;
-      border: none;
-      outline: none;
-      padding: 10px; 
-      width: 240px;
-      height: 36px;
-      vertical-align: bottom;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    padding: 24px 38px;
+    text-align: center;
+
+    .login-head {
+      margin-bottom: 15px;
+
+      h1 {
+        font-size: 30px;
+        font-weight: bold;
+        color: #f89cb8;
+      }
     }
-    button {
-       box-sizing: border-box;
-      border: none;
-      outline: none; 
-      width: 60px;
-      height: 36px;
-      
+    .login-body {
+      overflow: hidden;
+      input {
+        width: 100%;
+        height: 34px;
+        padding-left: 10px;
+        margin-bottom: 16px;
+        border: 1px solid #cccccc;
+        outline: none;
+        border-radius: 5px;
+      }
+      input[name="password"] {
+        margin-bottom: 12px;
+      }
+      .login-input-error {
+        border: 1px solid red;
+      }
+      p {
+        overflow: hidden;
+        margin-bottom: 4px;
+        .btn-go-register {
+          float: left;
+          text-decoration: initial;
+          color: #999999;
+        }
+        .btn-go-forget {
+          float: right;
+          text-decoration: initial;
+          color: #999999;
+        }
+      }
+      .login-error-message {
+        font-size: 12px;
+        color: red;
+        opacity: 0;
+      }
+      .show {
+        opacity: 1;
+      }
+      .btn-login {
+        font-size: 14px;
+        width: 100%;
+        height: 34px;
+        background: #f89cb8;
+        border-radius: 5px;
+        color: #fff;
+        border: none;
+        outline: none;
+        margin-top: 8px;
+      }
     }
   }
 }
