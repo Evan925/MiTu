@@ -1,12 +1,17 @@
 <template>
   <div class="login-container" id="login-container">
+    <mt-header title="登录">
+      <router-link to="/register" slot="right">
+        <mt-button>注册</mt-button>
+      </router-link>
+    </mt-header>
     <div class="login-content">
-      <div class="login-head">
+      <!-- <div class="login-head">
         <h1>登录</h1>
-      </div>
+      </div>-->
       <div class="login-body">
-        <input name="username"  type="text" v-model="username" placeholder="请输入用户名/邮箱...">
-        <input name="password"  type="password" v-model="password" placeholder="请输入密码...">
+        <input name="username" type="text" v-model="username" placeholder="请输入用户名/邮箱...">
+        <input name="password" type="password" v-model="password" placeholder="请输入密码...">
         <p>
           <a href="#" class="btn-go-register" @click="goRegister">没有账号？立即注册</a>
           <a href="#" class="btn-go-forget" @click="goForget">忘记密码？</a>
@@ -14,7 +19,6 @@
         <span class="login-error-message">用户名或密码输入错误，请检查！</span>
         <button type="button" class="btn-login" @click="doLogin">登录</button>
       </div>
-       <button type="button" @click="testGetApiWithNoToken">测试获取数据（不带token）</button>
     </div>
   </div>
 </template>
@@ -22,14 +26,19 @@
 <script>
 import $ from "jquery"; //加载jQuery
 import store from "@/store";
-import localDataHelper from "@/Utils/localDataHelper";
-import cookie from "@/Utils/localDataHelper";
+import localStore from "@/Utils/localStore";
+import cookie from "@/Utils/localStore";
 
 export default {
   name: "login",
   created() {
-    this.initWindow();
-    this.listenInputChange(); 
+    // this.initWindow();
+    this.listenInputChange();
+    // $('#main-bar-tab').hide()
+  },
+  mounted() {
+    $("#no-login-container").show();
+    $("#is-login-container").hide();
   },
   data() {
     return {
@@ -56,38 +65,49 @@ export default {
         content: "正在登录...",
         duration: 0
       });
-      setTimeout(msg, 1000);
+      setTimeout(msg, 200);
+      localStore.set("isLogin", true);
+      _this.$Message.success("登录成功");
+      _this.$router.push("/me");
+      // // const loginSuccessTimer = setTimeout(() => {
+      // //   _this.$axios
+      // //     .post("http://localhost:24063/api/Login", {
+      // //       username: _this.username,
+      // //       password: _this.password
+      // //     })
+      // //     .then(res => {
+      // //       console.log(res);
+      // //       if (res.status === 200) {
+      // //         if (res.data.code === 0) {
+      // //           localStore.set("isLogin", true);
+      // //           localStore.set("MiTuUserName", _this.username);
+      // //           localStore.set("MiTuUser_token", res.data.token);
+      // //           localStore.set(
+      // //             "MiTuUser_loginIdentity",
+      // //             res.data.loginIdentity
+      // //           );
+      // //           cookie.set(
+      // //             ".AspNetCore.Identity.Application",
+      // //             res.data.loginIdentity,
+      // //             "s10"
+      // //           );
 
-      const loginSuccessTimer = setTimeout(() => {
-        _this.$axios
-          .post("http://localhost:24063/api/Login", {
-            username: _this.username,
-            password: _this.password
-          })
-          .then(res => {
-            console.log(res);
-            if (res.status === 200) {
-              if(res.data.code===0){            
-         
-              localDataHelper.set('isLogin', true)
-              localDataHelper.set("MiTuUserName", _this.username)
-              localDataHelper.set("MiTuUser_token", res.data.token)
-              localDataHelper.set("MiTuUser_loginIdentity", res.data.loginIdentity)
-              cookie.set(".AspNetCore.Identity.Application",res.data.loginIdentity,'s10')
+      // //           _this.info();
+      // //           _this.$Message.success("登录成功");
+      // //           _this.$router.push("/me");
+      // //         } else {
+      // //           _this.$Message.error(res.data.message);
+      // //         }
+      // //       } else {
+      // //         _this.$Message.error("登录失败");
+      // //       }
+      // //     })
+      // //     .catch(error => {
 
-              _this.info();
-             _this.$Message.success("登录成功");     
-             _this.$router.push("/me");
-          }else{
-               _this.$Message.error(res.data.message);
-            }
-          } else {
-              _this.$Message.error("登录失败");
-            }
-          });
-             $(".btn-login").removeAttr("disabled");      
-        clearTimeout(loginSuccessTimer);
-      }, 2000);
+      // //     });
+      //   $(".btn-login").removeAttr("disabled");
+      //   clearTimeout(loginSuccessTimer);
+      // }, 2000);
     },
     goRegister() {
       //TODO:切换注册界面
@@ -96,8 +116,7 @@ export default {
     },
     goForget() {
       //TODO:切换找回密码界面
-      this.$Message.success("TODO:切换到找回密码页面！");
-      cookie.set(".AspNetCore.Identity.Application",res.data.loginIdentity) //设置token
+      this.$Message.success("TODO:切换到找回密码页面！"); 
     },
     initWindow() {
       const timer = setTimeout(() => {
@@ -159,12 +178,11 @@ export default {
         clearTimeout(_iTimer);
       }, 3000);
     },
-    testGetApiWithNoToken(){
-      this.$axios.get('http://localhost:24063/api/Login').then(res=>{
-        console.log(res)
-      })
-    },
-   
+    testGetApiWithNoToken() {
+      this.$axios.get("http://localhost:24063/api/Login").then(res => {
+        console.log(res);
+      });
+    }
   },
   components: {}
 };
@@ -172,19 +190,21 @@ export default {
 <style lang="less" scoped>
 .login-container {
   width: 100%;
-  // height: 100%;
+  height: 100%;
   background-image: url("../../assets/app_backgrouds/login_bg.jpeg");
   background-size: cover;
   overflow: hidden;
 
   .login-content {
     box-sizing: border-box;
-    width: 336px;
-    // height: 290px;
-    margin: auto;
-    background: rgba(255, 255, 255, 0.9);
+    width: 100%;
+    height: 100%;
+    // margin: auto;
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 5px;
-    padding: 24px 38px;
+    padding: 24px 65px;
+    text-align: center;
+
     text-align: center;
 
     .login-head {
@@ -198,6 +218,8 @@ export default {
     }
     .login-body {
       overflow: hidden;
+      margin: 50% auto;
+      // transform: translateY(-50%);
       input {
         width: 100%;
         height: 34px;

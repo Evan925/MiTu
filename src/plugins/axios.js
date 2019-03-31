@@ -24,6 +24,17 @@ _axios.interceptors.request.use(
     },
     function(error) {
         // Do something with request error
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    {
+                        Vue.$router.push('/login')
+                        break;
+                    }
+                case 404:
+                    {}
+            }
+        }
         return Promise.reject(error);
     }
 );

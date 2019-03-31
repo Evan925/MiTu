@@ -1,17 +1,12 @@
 <template>
 <div> 
- <div class="bottom-nav-bar">
-      <router-link class="nav-bar-item" to="/discover">发现</router-link>
-      <router-link class="nav-bar-item" to="/follows">关注</router-link>
-      <router-link class="nav-bar-item" to="/message">消息</router-link>
-      <router-link class="nav-bar-item" to="/me">我的</router-link>
-  </div>
+  
 </div>
  
 </template>
 
 <script>
-import store from '@/store'
+ 
 export default {
   name: 'BottomNavBar',
   props: { 
@@ -26,14 +21,13 @@ export default {
 }
 </script>
 
-
-<style scoped lang="less">
+<style lang="scss" scoped>
 
 .bottom-nav-bar{
   position: fixed;
   left: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 2999;
   width: 100%;
   height: 50px;
   background: white;
@@ -47,3 +41,5 @@ export default {
   }
 }
 </style>
+
+ 

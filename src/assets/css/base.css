@@ -1,0 +1,61 @@
+.mint-header {
+    background-color: #fe8cbf!important;
+    /* height: 45px!important; */
+}
+
+.router-link-active button {
+    color: #fff!important;
+}
+
+.mui-btn.mui-active:enabled,
+.mui-btn:enabled:active,
+button.mui-active:enabled,
+button:enabled:active,
+input[type=button].mui-active:enabled,
+input[type=button]:enabled:active,
+input[type=reset].mui-active:enabled,
+input[type=reset]:enabled:active,
+input[type=submit].mui-active:enabled,
+input[type=submit]:enabled:active {
+    background-color: #fda8ce;
+}
+
+.mint-button {
+    border-radius: initial;
+}
+
+.van-pull-refresh,
+.van-pull-refresh__track {
+    height: 100%;
+}
+
+.common-tab-publish-btn {
+    border-radius: 50%;
+    border: 1px solid;
+    width: 42px;
+    height: 42px;
+    margin: auto;
+    line-height: 42px;
+}
+
+.toggle-menu-btn {
+    width: 50px;
+    text-align: left;
+}
+
+.mint-header-title {
+    font-size: 16px;
+}
+
+#main-inner-content {
+    transition: transform .3s ease-in-out;
+}
+
+#offCanvasSide {
+    visibility: visible;
+}
+
+.mui-off-canvas-wrap.mui-active .mui-off-canvas-backdrop {
+    -webkit-box-shadow: -1px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
+    box-shadow: -1px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
+}

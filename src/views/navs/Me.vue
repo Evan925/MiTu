@@ -1,37 +1,42 @@
 <template>
   <div class="me">
-    <h2>我的页面</h2>
-    <a class="logout" @click="logout " v-show="isShowLogoutBtn">注销</a>
-    <br>
-    <button type="button" @click="testGetApiWithToken">测试获取数据（附带token）</button>
-    
-    <button type="button" @click="testGetCookies">测试获取当前登录用户的cookies</button>
+   <mt-header title="我的">
+      <mt-button class="toggle-menu-btn mui-icon mui-action-menu mui-icon-bars" slot="left"></mt-button>
+      <mt-button icon="more" slot="right"></mt-button>
+    </mt-header>
+    <a class="logout" @click="logout " v-show="isShowLogoutBtn">注销</a>   
   </div>
 </template>
 
 <script>
-import $ from "jquery"; //加载jQuery
-import store from "@/store";
-import localDataHelper from "@/Utils/localDataHelper";
+import $ from "jquery" 
+import store from "@/store"
+import localStore from "@/Utils/localStore"
+import base from "@/assets/js/base"
 
 export default {
-  name: "me",
+  name: "me", 
+  created() {},
+  mounted(){
+    $('#no-login-container').hide()
+    $('#is-login-container').show() 
+    base.initToggleMenu() 
+  },
   data() {
     return {
-      isShowLogoutBtn: localDataHelper.get("isLogin")
+      isShowLogoutBtn: localStore.get("isLogin")
     };
-  },
-  created() {},
+  }, 
   methods: {
     logout() {
       this.$Modal.confirm({
         title: "提示",
         content: "<p>您确定要注销当前登录吗？</p>",
         onOk: () => {
-          localDataHelper.remove("isLogin");
-          localDataHelper.remove("MiTuUser_token");
-          localDataHelper.remove("MiTuUserName");
-
+          localStore.set("isLogin",false);
+          localStore.remove("MiTuUser_token");
+          localStore.remove("MiTuUserName");
+ 
           this.isShowLogoutBtn = !this.isShowLogoutBtn;
           this.$Message.error("注销成功！");
           this.$router.push("/login");
@@ -79,17 +84,17 @@ export default {
 </script>
 <style lang="less" scoped>
 .me {
-  background: #f8a5c2;
-  height: 736px;
+  // background: #f8a5c2;
+  // height: 736px;
   text-align: center;
   h2 {
     margin: 0;
   }
 }
 .logout {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  color: red;
+  // position: fixed;
+  // top: 10px;
+  // right: 10px;
+  // color: red;
 }
 </style>
