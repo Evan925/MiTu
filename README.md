@@ -35,3 +35,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     3.https://colourco.de/
     4.https://coolors.co
     5.https://flatuicolors.com/
+
+##在线数据模拟接口平台
+    1.https://www.fastmock.site/  --不支持跨域请求
+    2.https://www.easy-mock.com   --支持跨域请求（在用）
+
+##在线图库接口
+    1.

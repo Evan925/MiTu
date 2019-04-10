@@ -1,0 +1,283 @@
+/* 公共样式 */
+
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+img {
+    background-color: rgba(254, 140, 191, 0.2);
+}
+
+.mitu-circle {
+    border-radius: 50%;
+}
+
+.mitu-female {
+    color: #03a9f4;
+}
+
+.mitu-male {
+    color: #fe8cbf;
+}
+
+.mitu-sex {
+    position: relative;
+}
+
+.mitu-sex::before {
+    position: absolute;
+    top: -8px;
+}
+
+.main-bar-header,
+.mint-header {
+    background-color: #fe8cbf!important;
+    /* background-color: #f99cb7!important; */
+    height: 44px!important;
+    color: #fff;
+}
+
+.main-bar-header h1 {
+    color: #fff;
+}
+
+.main-bar-header a:hover,
+.main-bar-header a:active {
+    color: grey;
+}
+
+.mitu-router,
+.mui-off-canvas-wrap .mui-inner-wrap {
+    background-color: #efeff4;
+}
+
+.router-link-active button {
+    color: #fff!important;
+}
+
+.mui-btn.mui-active:enabled,
+.mui-btn:enabled:active,
+button.mui-active:enabled,
+button:enabled:active,
+input[type=button].mui-active:enabled,
+input[type=button]:enabled:active,
+input[type=reset].mui-active:enabled,
+input[type=reset]:enabled:active,
+input[type=submit].mui-active:enabled,
+input[type=submit]:enabled:active {
+    background-color: #c4a8b4;
+}
+
+.mint-button {
+    border-radius: initial;
+}
+
+.van-pull-refresh,
+.van-pull-refresh__track {
+    height: 100%;
+}
+
+#main-tab-publish {
+    color: #fff;
+}
+
+.common-tab-publish-btn {
+    border-radius: 50%;
+    /* border: 1px solid; */
+    width: 45px;
+    height: 45px;
+    margin: auto;
+    line-height: 45px;
+    background-color: #fe8cbf;
+    /* background-color: #f99cb7; */
+    /* font-weight: 400; */
+    box-sizing: border-box;
+}
+
+.common-tab-publish-btn .mui-icon-plusempty:before {
+    font-weight: bold;
+}
+
+.toggle-menu-btn {
+    width: 50px;
+    text-align: left;
+    font-size: 22px!important;
+    color: #fff;
+}
+
+.mint-header-title {
+    font-size: 16px;
+}
+
+#main-inner-content {
+    transition: transform .2s ease-in-out;
+}
+
+#offCanvasSide {
+    visibility: visible;
+}
+
+.mui-off-canvas-wrap.mui-active .mui-off-canvas-backdrop {
+    -webkit-box-shadow: -1px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
+    box-shadow: -1px 0 4px rgba(0, 0, 0, .5), 4px 0 4px rgba(0, 0, 0, .5);
+}
+
+.ivu-card-bordered {
+    border: none;
+}
+
+.ivu-card {
+    border-radius: 0;
+}
+
+.content-data {
+    margin: 4px 0;
+}
+
+#no-login-container {
+    overflow: hidden;
+    position: relative;
+}
+
+#no-login-container .mitu-router {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    /* transition: all 60s ease-in-out;  */
+}
+
+
+/* 页面切换效果 */
+
+.mitu-content {
+    padding-top: 44px;
+    padding-bottom: 50px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.mitu-router {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    top: 0;
+    z-index: 11;
+}
+
+.discover.mitu-router,
+.square.mitu-router,
+.follows.mitu-router,
+.me.mitu-router {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* padding-bottom: 50px; */
+    box-sizing: border-box;
+    top: initial;
+    z-index: initial;
+    /* transition: all 60s ease-in-out;  */
+}
+
+.turn-on-enter {
+    transform: translate3d(100%, 0, 0);
+}
+
+.turn-on-leave-to {
+    /* transform: translate3d(-20%, 0, 0); */
+}
+
+.turn-on-enter-active,
+.turn-on-leave-active {
+    transition: transform 0.3s ease;
+}
+
+.turn-off-enter {
+    /* transform: translate3d(-20%, 0, 0); */
+}
+
+.turn-off-leave-to {
+    transform: translate3d(100%, 0, 0);
+}
+
+.turn-off-enter-active,
+.turn-off-leave-active {
+    transition: transform 0.3s ease;
+}
+
+.turn-off-leave-active {
+    z-index: 2;
+}
+
+.has-follow:hover,
+.has-follow {
+    background-color: #fe8cbf!important;
+}
+
+.has-follow>span {
+    color: #fff !important;
+}
+
+
+/**重写下拉刷新样式*/
+
+.mescroll-downwarp .downwarp-progress,
+.mescroll-upwarp .upwarp-progress {
+    border: 1px solid #FF8095!important;
+    border-bottom-color: transparent!important;
+}
+
+.mescroll-downwarp .downwarp-tip,
+.mescroll-upwarp .upwarp-tip,
+.mescroll-upwarp .upwarp-nodata {
+    color: #FF8095!important;
+}
+
+.mescroll-downwarp .downwarp-slogan {
+    display: block;
+    width: 210px;
+    height: 84px;
+    margin: auto;
+}
+
+// .mescroll-downwarp .downwarp-progress {
+//     width: 20px;
+//     height: 20px;
+//     border: none;
+//     margin: auto;
+//     background-size: contain;
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     background-image: url(../mescroll/option/mescroll-progress.png);
+//     -webkit-transition: all 300ms;
+//     transition: all 300ms;
+// }
+.mescroll-downwarp .downwarp-loading {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #FF8095;
+    border-bottom-color: transparent;
+}
+
+.mescroll-downwarp .downwarp-mascot {
+    position: absolute;
+    right: 8px;
+    bottom: 0;
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    -webkit-animation: animMascot .6s steps(1, end) infinite;
+    animation: animMascot .6s steps(1, end) infinite;
+}

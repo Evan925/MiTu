@@ -2,7 +2,7 @@
   <div class="login-container" id="login-container">
     <mt-header title="登录">
       <router-link to="/register" slot="right">
-        <mt-button>注册</mt-button>
+        <mt-button class="go-register">注册</mt-button>
       </router-link>
     </mt-header>
     <div class="login-content">
@@ -28,17 +28,14 @@ import $ from "jquery"; //加载jQuery
 import store from "@/store";
 import localStore from "@/Utils/localStore";
 import cookie from "@/Utils/localStore";
+import base from "@/assets/js/base";
+import common from "@/Utils/common";
 
 export default {
   name: "login",
-  created() {
-    // this.initWindow();
-    this.listenInputChange();
-    // $('#main-bar-tab').hide()
-  },
+  created() {},
   mounted() {
-    $("#no-login-container").show();
-    $("#is-login-container").hide();
+    this.init();
   },
   data() {
     return {
@@ -48,6 +45,10 @@ export default {
     };
   },
   methods: {
+    init() {
+      base.removeHandleRight();
+      this.listenInputChange();
+    },
     doLogin() {
       let _this = this;
       if (_this.username === "") {
@@ -61,11 +62,8 @@ export default {
         return false;
       }
       $(".btn-login").attr("disabled", "disabled");
-      const msg = _this.$Message.loading({
-        content: "正在登录...",
-        duration: 0
-      });
-      setTimeout(msg, 200);
+      base.onHandleRight();
+      base.showLoading(1000);
       localStore.set("isLogin", true);
       _this.$Message.success("登录成功");
       _this.$router.push("/me");
@@ -116,16 +114,7 @@ export default {
     },
     goForget() {
       //TODO:切换找回密码界面
-      this.$Message.success("TODO:切换到找回密码页面！"); 
-    },
-    initWindow() {
-      const timer = setTimeout(() => {
-        let _wH = $(window).height(),
-          _$loginContent = $(".login-content");
-        _$loginContent.css("margin-top", _wH / 2 - _$loginContent.height() / 2);
-        $(".login-container").height(_wH);
-        clearTimeout(timer);
-      }, 1);
+      this.$Message.success("TODO:切换到找回密码页面！");
     },
     listenInputChange() {
       let _this = this;
@@ -177,36 +166,29 @@ export default {
         });
         clearTimeout(_iTimer);
       }, 3000);
-    },
-    testGetApiWithNoToken() {
-      this.$axios.get("http://localhost:24063/api/Login").then(res => {
-        console.log(res);
-      });
     }
   },
   components: {}
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .login-container {
   width: 100%;
   height: 100%;
-  background-image: url("../../assets/app_backgrouds/login_bg.jpeg");
-  background-size: cover;
+  // background-image: url("../../assets/app_backgrouds/login_bg.jpeg");
+  // background-size: cover;
   overflow: hidden;
-
+  .go-register {
+    font-size: 12px;
+  }
   .login-content {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    // margin: auto;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 1);
     border-radius: 5px;
     padding: 24px 65px;
     text-align: center;
-
-    text-align: center;
-
     .login-head {
       margin-bottom: 15px;
 

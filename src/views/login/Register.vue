@@ -1,18 +1,14 @@
 <template>
   <!-- <transition name="fade"> -->
   <div class="register-container" id="register-container">
-    <mt-header title="注册">
-      <router-link to="/login" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link> 
+    <mt-header title="注册">    
+        <mt-button icon="back" @click="back"  slot="left"></mt-button>     
     </mt-header>
     <div class="register-content">
       <!-- <div class="register-head">
         <h1>注册</h1>
-      </div> -->
+      </div>-->
       <div class="register-body">
-        <input name="nickname" type="text" v-model="nickname" placeholder="请输入昵称...">
-        <input name="email" type="email" v-model="email" placeholder="请输入邮箱...">
         <input name="username" type="text" v-model="username" placeholder="请输入用户名...">
         <input name="password" type="password" v-model="password" placeholder="请输入密码...">
         <input
@@ -36,32 +32,30 @@
 </template>
 
 <script>
-import $ from "jquery"; //加载jQuery
-import localStore from "@/Utils/localStore";
+import $ from "jquery" //加载jQuery
+import localStore from "@/Utils/localStore"
+import base from '@/assets/js/base' 
 
 export default {
   name: "Register",
   data() {
-    return {
-      nickname: "",
-      email: "",
+    return { 
       username: "",
       password: "",
       confirmPassword: ""
     };
   },
-  created() {
-    this.initWindow();
-  },
+  created() {}, 
   methods: {
+    back(){
+     base.back(this)
+    },
     doRegister() {
       let _this = this;
       this.$axios
         .post("http://localhost:24063/api/Register", {
           username: this.username,
-          password: this.password,
-          email: this.email,
-          nickname: this.nickname
+          password: this.password
         })
         .then(res => {
           if (res.status === 200) {
@@ -87,47 +81,25 @@ export default {
       //TODO:切换登录界面
       // this.$Message.success("TODO:切换到登录页面！");
       this.$router.push("/login");
-    },
-    initWindow() {
-      const timer = setTimeout(() => {
-        let _wH = $(window).height(),
-          _$registerContent = $(".register-content");
-        // _$registerContent.css(
-        //   "margin-top",
-        //   _wH / 2 - _$registerContent.height() / 2
-        // );
-        $(".register-container").height(_wH);
-        clearTimeout(timer);
-      }, 1);
     }
   },
   components: {}
 };
 </script>
 
-<style lang="less" scoped>
-// .fade-enter-active, .fade-leave-active {
-//   transition: left 0;
-// }
-// .fade-enter, .fade-leave-to {
-//   left: 414px;
-// }
-
+<style lang="scss" scoped>
 .register-container {
-  // position: absolute;
-  // left: 414px;
   width: 100%;
-  // height: 100%;
-  background-image: url("../../assets/app_backgrouds/login_bg.jpeg");
-  background-size: cover;
+  height: 100%;
+  // background-image: url("../../assets/app_backgrouds/login_bg.jpeg");
+  // background-size: cover;
   overflow: hidden;
 
   .register-content {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    // margin: 50% auto;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 1);
     border-radius: 5px;
     padding: 20px 65px;
     text-align: center;
